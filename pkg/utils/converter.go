@@ -4,14 +4,12 @@ import (
 	"go-grpc-http/internal/pb"
 	"go-grpc-http/internal/postgresql"
 
-	"github.com/emicklei/pgtalk/convert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func ConvertCar(car postgresql.Car) *pb.Car {
-	carID := convert.UUIDToString(convert.UUID(car.ID))
 	return &pb.Car{
-		Id:          carID,
+		Id:          car.ID.String(),
 		Name:        car.Name,
 		Model:       car.Model,
 		Color:       car.Color,
