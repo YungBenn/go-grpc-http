@@ -24,6 +24,7 @@ func RunServer(log *logrus.Logger,db *pgxpool.Pool, address string) {
 	pb.RegisterCarServiceServer(server, srv)
 	reflection.Register(server)
 
+	log.Info("starting gRPC server...")
 	err = server.Serve(listen)
 	if err != nil {
 		log.Errorf("cannot start gRPC server: %v", err)

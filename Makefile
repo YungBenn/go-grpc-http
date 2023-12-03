@@ -31,17 +31,7 @@ migrate.down:
 	migrate -path db/migrations -database "postgresql://postgres:password@localhost:5432/example_grpc?sslmode=disable" down
 
 evans:
-	docker run ghcr.io/ktr0731/evans:latest --host localhost --port 9090 -r repl
-
-# evans:
-# 	docker run --rm -v "/home/rubenadi/tuts/go-grpc-http:/mount:ro" \
-# 		ghcr.io/ktr0731/evans:latest \
-# 		--path ./api/proto \
-# 		-proto car.proto \
-# 		--host localhost \
-# 		--port 9090 \
-# 		-r \
-# 		repl
+	evans --host localhost --port 9090 -r repl
 
 run.dev:
 	go run ./cmd/server/main.go
