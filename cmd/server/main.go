@@ -4,7 +4,6 @@ import (
 	"context"
 	"go-grpc-http/internal/http/rpc"
 	"go-grpc-http/internal/postgresql"
-	"go-grpc-http/internal/service"
 	"go-grpc-http/pkg/utils"
 	"os"
 
@@ -24,8 +23,5 @@ func main() {
 		log.Panic(err)
 	}
 
-	repo := postgresql.NewRepository(db)
-	srv := service.NewCarServiceServer(log, repo)
-
-	rpc.RunServer(context.Background(), log, srv, os.Getenv("GRPC_PORT"))
+	rpc.RunServer(log, db, os.Getenv("GRPC_ADDRESS"))
 }
