@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "go-grpc-http/internal/pb";
+
+message Car {
+    string id = 1;
+    string name = 2;
+    string model = 3;
+    string color = 4;
+    string year = 5;
+    string price = 6;
+    string image = 7;
+    string description = 8;
+    google.protobuf.Timestamp created_at = 9;
+    google.protobuf.Timestamp updated_at = 10;
+}
+
+message CreateCarRequest {
+    string name = 1;
+    string model = 2;
+    string color = 3;
+    string year = 4;
+    string price = 5;
+    string image = 6;
+    string description = 7;
+}
+
+message CreateCarResponse {
+    Car car = 1;
+}
+
+message ListCarRequest {
+    string limit = 1;
+}
+
+message ListCarResponse {
+    repeated Car cars = 1;
+}
+
+message ReadCarRequest {
+    string id = 1;
+}
+
+message ReadCarResponse {
+    Car car = 1;
+}
+
+message UpdateCarRequest {
+    string id = 1;
+    string name = 2;
+    string model = 3;
+    string color = 4;
+    string year = 5;
+    string price = 6;
+    string image = 7;
+    string description = 8;
+}
+
+message UpdateCarResponse {
+    Car car = 1;
+}
+
+message DeleteCarRequest {
+    string id = 1;
+}
+
+message DeleteCarResponse {
+    string id = 1;
+}
+
+service CarService {
+    rpc CreateCar(CreateCarRequest) returns (CreateCarResponse) {}
+    rpc ListCar(ListCarRequest) returns (ListCarResponse) {}
+    rpc ReadCar(ReadCarRequest) returns (ReadCarResponse) {}
+    rpc UpdateCar(UpdateCarRequest) returns (UpdateCarResponse) {}
+    rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse) {}
+}
