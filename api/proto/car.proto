@@ -3,6 +3,7 @@ syntax = "proto3";
 package pb;
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
 
 option go_package = "go-grpc-http/internal/pb";
 
@@ -73,9 +74,31 @@ message DeleteCarResponse {
 }
 
 service CarService {
-    rpc CreateCar(CreateCarRequest) returns (CreateCarResponse) {}
-    rpc ListCar(ListCarRequest) returns (ListCarResponse) {}
-    rpc ReadCar(ReadCarRequest) returns (ReadCarResponse) {}
-    rpc UpdateCar(UpdateCarRequest) returns (UpdateCarResponse) {}
-    rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse) {}
+    rpc CreateCar(CreateCarRequest) returns (CreateCarResponse) {
+        option (google.api.http) = {
+            post: "/v1/cars"
+            body: "*"
+        };
+    }
+    rpc ListCar(ListCarRequest) returns (ListCarResponse) {
+        option (google.api.http) = {
+            get: "/v1/cars"
+        };
+    }
+    rpc ReadCar(ReadCarRequest) returns (ReadCarResponse) {
+        option (google.api.http) = {
+            get: "/v1/cars/{id}"
+        };
+    }
+    rpc UpdateCar(UpdateCarRequest) returns (UpdateCarResponse) {
+        option (google.api.http) = {
+            put: "/v1/cars/{id}"
+            
+        };
+    }
+    rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cars/{id}"
+        };
+    }
 }

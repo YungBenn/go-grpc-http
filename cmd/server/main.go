@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"go-grpc-http/internal/http/rpc"
+	"fmt"
+	"go-grpc-http/internal/http/grpc"
 	"go-grpc-http/internal/postgresql"
 	"go-grpc-http/pkg/utils"
 	"os"
@@ -18,10 +19,20 @@ func main() {
 		log.Fatal("Error loading .env file")	
 	}
 
-	db, err := postgresql.Connect(context.Background(), log, os.Getenv("DATABASE_URL"))
+	dbURL := fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=%s", 
+		os.Getenv("DB_USER"), 
+		os.Getenv("DB_PASSWORD"), 
+		os.Getenv("DB_HOST"), 
+		os.Getenv("DB_PORT"), 
+		os.Getenv("DB_NAME"), 
+		os.Getenv("DB_SSL_MODE"),
+	)
+	db, err := postgresql.Connect(context.Background(), log, dbURL)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	rpc.RunServer(log, db, os.Getenv("GRPC_ADDRESS"))
+	serverUrl := fmt.Sprintf("%v:%v", os.Getenv("SERVER_HOST"), os.Getenv("SERVER_PORT"))
+	grpc.RunServer(log, db, serverUrl)
 }

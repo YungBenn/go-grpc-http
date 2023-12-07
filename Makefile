@@ -4,10 +4,15 @@ build.server:
 build.client:
 	go build -o ./bin/main ./cmd/client/main.go
 
+tidy:
+	go mod tidy
+
 proto:
+	rm -f internal/pb/*.go
 	protoc --proto_path=api/proto --go_out=internal/pb --go_opt=paths=source_relative \
-		--go-grpc_out=internal/pb --go-grpc_opt=paths=source_relative \
-		api/proto/*.proto
+	--go-grpc_out=internal/pb --go-grpc_opt=paths=source_relative \
+	--grpc-gateway_out=internal/pb --grpc-gateway_opt=paths=source_relative \
+	api/proto/*.proto
 
 docker.build:
 	docker build -t go-grpc-http .
@@ -17,6 +22,11 @@ docker.up:
 
 docker.down:
 	docker compose down
+
+docker.clean:
+	docker-compose kill && docker-compose rm -f
+	docker rmi grpc_training_server:v1
+	docker rmi grpc_training_client:v1
 
 sqlc:
 	docker run --rm -v /home/rubenadi/tuts/go-grpc-http:/src -w /src sqlc/sqlc generate
@@ -33,10 +43,10 @@ migrate.down:
 evans:
 	evans --host localhost --port 9090 -r repl
 
-run.dev:
+run.server:
 	go run ./cmd/server/main.go
 
-run.prod:
-	export APP_ENV=production && go run ./cmd/server/main.go
+run.client:
+	go run ./cmd/client/main.go
 
-.PHONY: build.server build.client proto docker.build docker.up docker.down sqlc migrate migrate.up migrate.down run.dev run.prod
+.PHONY: sqlc proto

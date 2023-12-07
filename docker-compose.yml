@@ -1,5 +1,9 @@
 version: '3.1'
 
+networks:
+  default:
+    name: grpc_training
+
 services:
 
   db:
@@ -17,15 +21,29 @@ services:
     ports:
       - "8081:8080"
 
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #     - "9090:9090"
-  #   depends_on:
-  #     - db
-  #   command: ["/app/main"]
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: always
+    image: grpc_training_server:v1
+    environment:
+      DB_HOST: db
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    restart: always
+    image: grpc_training_client:v1
+    environment:
+      SERVER_HOST: server
+    ports:
+      - "9091:9091"
+    depends_on:
+      - server
     

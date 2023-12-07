@@ -1,4 +1,4 @@
-package rpc
+package grpc
 
 import (
 	"go-grpc-http/internal/pb"
