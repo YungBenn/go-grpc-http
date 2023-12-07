@@ -93,7 +93,7 @@ service CarService {
     rpc UpdateCar(UpdateCarRequest) returns (UpdateCarResponse) {
         option (google.api.http) = {
             put: "/v1/cars/{id}"
-            
+            body: "*"
         };
     }
     rpc DeleteCar(DeleteCarRequest) returns (DeleteCarResponse) {
